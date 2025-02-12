@@ -1,1 +1,153 @@
-<h1> LOOPZone </h1>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOOPZONE</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .player {
+            background: linear-gradient(to bottom, #222222, #000000);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            text-align: center;
+            width: 300px;
+        }
+
+        .cover img {
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        .info h1 {
+            font-size: 24px;
+            margin: 12px 0 5px;
+            color: #ffffff;
+        }
+
+        .info p {
+            font-size: 16px;
+            margin: 15px;
+            color: #7a7a7a;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .controls button {
+            background-color: #1d1d1d;
+            border: none;
+            border-radius: 50%;
+            color: #ffffff;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 10px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .progress-container {
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            cursor: pointer;
+            height: 5px;
+            position: relative;
+            width: 100%;
+        }
+
+        .progress-bar {
+            background-color: #007bff;
+            border-radius: 5px;
+            height: 100%;
+            width: 0%;
+            transition: width 0.1s;
+        }
+
+        .time {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #525252;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="player">
+        <div class="cover">
+            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg1u_dF-m-haZu58C7hpaO1KElfi349QQXjl-QcqvX6O_Zb0c67Q4zs1RUp1CYZq-HtLrKKuDCT8rxeS6Pq2_SnRVME2LjQh14r_RZlctpyl0b-6iEuirERzaS-WozVjufyXIUZDYwNZoRGpTbU5o79MJuwEr1R5xJsps_4ITTjJ2kWnbzjI_PxybNWRxPA/s16000/COVER-SALMO-23.jpg" alt="Portada del álbum">
+        </div>
+        <div class="info">
+            <h1>SALMO 23</h1>
+            <p>LOOPZONE</p>
+        </div>
+        <div class="progress-container">
+            <div class="progress-bar"></div>
+        </div>
+        <div class="time">
+            <span id="currentTime">0:00</span>
+            <span id="duration">-1:03</span>
+        </div>
+        <div class="controls">
+            <button id="playPauseBtn">&#9658;</button>
+        </div>
+    </div>
+    <script>
+        const audio = new Audio('https://my.microsoftpersonalcontent.com/personal/ccb0f5a2544dccbd/_layouts/15/download.aspx?UniqueId=80782c19-4e6a-4711-9e4c-3aec9977632b&Translate=false&tempauth=v1e.eyJzaXRlaWQiOiIwMTE5ZjJhNi1iYWE1LTRlZGYtYjM2NS1jMjhlNjc0NDcyZWMiLCJhcHBpZCI6IjAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDA0ODE3MTBhNCIsImF1ZCI6IjAwMDAwMDAzLTAwMDAtMGZmMS1jZTAwLTAwMDAwMDAwMDAwMC9teS5taWNyb3NvZnRwZXJzb25hbGNvbnRlbnQuY29tQDkxODgwNDBkLTZjNjctNGM1Yi1iMTEyLTM2YTMwNGI2NmRhZCIsImV4cCI6IjE3MzkzMzc1OTEifQ.L36R_1o4vKdyqVVZItVQ2fr5Jb2xDcpaWnDmLJHGWhWIfNlgOpY-Qx5yt7NwY0HjNwe-OC6yS64skE5fFpSnO9fWWi8Fti2YdtVc3cEsqM36ao03d3WVWlnvMs4rNUu4OZK32QXUvcyKs4Z5wRfLBpQP9DwM5hMJVFs8zL4CfVf9CIhAKU1ZjVssmHXGkepPAO91xpQVpQHeDSgNrH09_RTVzm5lG7gUEQRnTecIHTLo8uCZR-v4nwynrsyMHt3AqlIefQsXv7UDe5Uql4enxXLQIK2oMdvIkGP6YOBzdPLznJ3tQAQvuVPji2nj-1KrIxBHdEheXCoBObidKDgeQCMpHlW-ZdgI17jelEZmg87Yq0wv1eeHb2-2kveZLlMqX4K4yQjqx0VdFiEVHKTCXw.dzTxnrvjm6b6OgQpne9L9ZOz_bvr9QyfwX84XcZQm4Y&ApiVersion=2.0');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const progressBar = document.querySelector('.progress-bar');
+        const progressContainer = document.querySelector('.progress-container');
+        const currentTime = document.getElementById('currentTime');
+        const duration = document.getElementById('duration');
+
+        playPauseBtn.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play();
+                playPauseBtn.innerHTML = '&#10074;&#10074;';
+            } else {
+                audio.pause();
+                playPauseBtn.innerHTML = '&#9658;';
+            }
+        });
+
+        audio.addEventListener('timeupdate', () => {
+            const progressPercent = (audio.currentTime / audio.duration) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+            currentTime.textContent = formatTime(audio.currentTime);
+        });
+
+        progressContainer.addEventListener('click', (e) => {
+            const clickX = e.offsetX;
+            const width = progressContainer.clientWidth;
+            const duration = audio.duration;
+            audio.currentTime = (clickX / width) * duration;
+        });
+
+        audio.addEventListener('loadedmetadata', () => {
+            duration.textContent = formatTime(audio.duration);
+        });
+
+        function formatTime(time) {
+            const minutes = Math.floor(time / 60);
+            const seconds = Math.floor(time % 60);
+            return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        }
+    </script>
+</body>
+</html>
